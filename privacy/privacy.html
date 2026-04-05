@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Privacy Policy — Kippit</title>
+<meta name="description" content="Kippit Privacy Policy. Kippit stores all data on your device. No data is collected, sold, or shared.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --ink:#0d0e10; --ink-2:#3a3d45; --ink-3:#7a7f8e;
+    --paper:#f7f6f2; --accent:#1a6aff; --border:rgba(0,0,0,0.08);
+  }
+  html { scroll-behavior: smooth; }
+  body { font-family:'DM Sans',sans-serif; background:var(--paper); color:var(--ink); font-size:17px; line-height:1.7; }
+
+  /* NAV */
+  .site-nav { display:flex; align-items:center; justify-content:space-between; padding:1.1rem 2rem; border-bottom:1px solid var(--border); max-width:1100px; margin:0 auto; }
+  .nav-logo { font-family:'Syne',sans-serif; font-weight:800; font-size:1.2rem; letter-spacing:-0.02em; color:var(--ink); text-decoration:none; }
+  .nav-logo span { color:var(--accent); }
+  .nav-back { font-size:0.88rem; color:var(--ink-3); text-decoration:none; transition:color 0.2s; }
+  .nav-back:hover { color:var(--accent); }
+
+  /* HERO */
+  .page-hero { max-width:1100px; margin:0 auto; padding:4rem 2rem 3rem; border-bottom:1px solid var(--border); display:grid; grid-template-columns:1fr auto; align-items:end; gap:2rem; }
+  .page-hero-label { font-size:0.75rem; font-weight:700; letter-spacing:0.1em; text-transform:uppercase; color:var(--accent); margin-bottom:0.75rem; }
+  h1 { font-family:'Syne',sans-serif; font-size:clamp(2rem,4vw,3rem); font-weight:800; letter-spacing:-0.03em; line-height:1.05; color:var(--ink); }
+  .page-hero-meta { text-align:right; font-size:0.82rem; color:var(--ink-3); line-height:1.8; }
+
+  /* TWO-COLUMN LAYOUT */
+  .content-wrap { max-width:1100px; margin:0 auto; padding:4rem 2rem; display:grid; grid-template-columns:220px 1fr; gap:5rem; align-items:start; }
+
+  /* STICKY TOC — requires align-self:start + max-height on the element itself */
+  .toc { position:sticky; top:2rem; align-self:start; max-height:calc(100vh - 4rem); overflow-y:auto; }
+  .toc-label { font-size:0.72rem; font-weight:700; letter-spacing:0.08em; text-transform:uppercase; color:var(--ink-3); margin-bottom:1rem; }
+  .toc a { display:block; font-size:0.85rem; color:var(--ink-3); text-decoration:none; padding:0.35rem 0 0.35rem 1rem; border-left:2px solid transparent; transition:all 0.2s; line-height:1.4; }
+  .toc a:hover { color:var(--accent); border-left-color:var(--accent); }
+  .toc a.active { color:var(--accent); border-left-color:var(--accent); font-weight:500; }
+
+  /* POLICY */
+  .policy h2 { font-family:'Syne',sans-serif; font-size:1.3rem; font-weight:700; color:var(--ink); margin:3rem 0 1rem; letter-spacing:-0.02em; scroll-margin-top:2rem; }
+  .policy h2:first-of-type { margin-top:0; }
+  .policy p { color:var(--ink-2); margin-bottom:1rem; font-weight:300; line-height:1.75; }
+  .policy ul { list-style:none; margin:0.5rem 0 1rem; }
+  .policy ul li { color:var(--ink-2); font-weight:300; padding:0.35rem 0 0.35rem 1.5rem; position:relative; border-bottom:1px solid var(--border); }
+  .policy ul li:last-child { border-bottom:none; }
+  .policy ul li::before { content:'->'; position:absolute; left:0; color:var(--accent); }
+
+  /* BOXES */
+  .hbox { border-radius:14px; padding:1.5rem 1.75rem; margin:1.5rem 0; }
+  .hbox.green { background:#eaf7f0; border-left:3px solid #1a9e66; }
+  .hbox.blue  { background:#e8f0ff; border-left:3px solid var(--accent); }
+  .hbox p { margin:0; color:#1a3a2a; font-weight:400; }
+  .hbox.blue p { color:#1a2e5a; }
+  .hbox strong { font-weight:600; }
+
+  /* TABLE */
+  .ptable { width:100%; border-collapse:collapse; margin:1.5rem 0; }
+  .ptable th { font-size:0.78rem; font-weight:700; letter-spacing:0.06em; text-transform:uppercase; color:var(--ink-3); text-align:left; padding:0.6rem 1rem; border-bottom:2px solid var(--border); }
+  .ptable td { padding:0.85rem 1rem; font-size:0.92rem; color:var(--ink-2); font-weight:300; border-bottom:1px solid var(--border); vertical-align:top; }
+  .ptable td:first-child { font-weight:500; color:var(--ink); }
+  .no { color:#e63b2e; font-weight:600; }
+
+  /* CONTACT */
+  .contact-card { background:var(--ink); color:#fff; border-radius:20px; padding:2.5rem; margin-top:3rem; display:flex; align-items:flex-start; gap:2rem; flex-wrap:wrap; }
+  .contact-card h3 { font-family:'Syne',sans-serif; font-size:1.2rem; font-weight:700; margin-bottom:0.35rem; }
+  .contact-card p { color:rgba(255,255,255,0.6); font-size:0.9rem; font-weight:300; }
+  .contact-card a { display:inline-block; margin-top:1rem; background:var(--accent); color:#fff; padding:0.7rem 1.6rem; border-radius:100px; font-size:0.9rem; font-weight:600; text-decoration:none; transition:opacity 0.2s; }
+  .contact-card a:hover { opacity:0.85; }
+  .contact-meta { border-left:1px solid rgba(255,255,255,0.1); padding-left:2rem; font-size:0.82rem; color:rgba(255,255,255,0.4); line-height:2; }
+  .contact-meta span { color:rgba(255,255,255,0.75); }
+
+  /* FOOTER */
+  .site-footer { border-top:1px solid var(--border); padding:2rem; display:flex; justify-content:space-between; align-items:center; max-width:1100px; margin:0 auto; flex-wrap:wrap; gap:1rem; }
+  .footer-logo { font-family:'Syne',sans-serif; font-weight:800; font-size:1rem; color:var(--ink); text-decoration:none; }
+  .footer-logo span { color:var(--accent); }
+  .footer-copy { font-size:0.82rem; color:var(--ink-3); }
+  .footer-copy a { color:inherit; text-decoration:none; }
+
+  /* SUBHEADING */
+  .sub-h { font-family:'Syne',sans-serif; font-weight:700; font-size:1rem; margin:1.5rem 0 0.75rem; color:var(--ink); }
+
+  @media (max-width:800px) {
+    .content-wrap { grid-template-columns:1fr; gap:0; }
+    .toc { display:none; }
+    .page-hero { grid-template-columns:1fr; }
+    .page-hero-meta { text-align:left; }
+    .contact-card { flex-direction:column; }
+    .contact-meta { border-left:none; border-top:1px solid rgba(255,255,255,0.1); padding-left:0; padding-top:1.5rem; }
+  }
+</style>
+</head>
+<body>
+
+<nav class="site-nav">
+  <a href="/" class="nav-logo">Kipp<span>it</span></a>
+  <a href="/" class="nav-back">&larr; Back to home</a>
+</nav>
+
+<div class="page-hero">
+  <div>
+    <div class="page-hero-label">Legal</div>
+    <h1>Privacy Policy</h1>
+  </div>
+  <div class="page-hero-meta">
+    Last updated: April 2026<br>
+    Effective: April 2026<br>
+    App: Kippit v1.0
+  </div>
+</div>
+
+<div class="content-wrap">
+
+  <nav class="toc" aria-label="Table of contents">
+    <div class="toc-label">Contents</div>
+    <a href="#overview">Overview</a>
+    <a href="#data-collected">Data we collect</a>
+    <a href="#data-not-collected">Data we never collect</a>
+    <a href="#icloud">iCloud sync</a>
+    <a href="#third-parties">Third parties</a>
+    <a href="#children">Children</a>
+    <a href="#changes">Changes</a>
+    <a href="#contact">Contact</a>
+  </nav>
+
+  <div class="policy">
+
+    <div class="hbox green">
+      <p><strong>The short version:</strong> Kippit stores all your financial data locally on your device. We do not collect it, we cannot see it, and we never sell it. No account is required to use the app.</p>
+    </div>
+
+    <h2 id="overview">Overview</h2>
+    <p>Kippit (&ldquo;the app&rdquo;, &ldquo;we&rdquo;, &ldquo;our&rdquo;) is a personal expense tracking application for iPhone developed by Erica Cheong and distributed at kipp-it.app.</p>
+    <p>This Privacy Policy explains what information the app handles, how it is stored, and your rights regarding that information. By using Kippit, you agree to this policy.</p>
+
+    <h2 id="data-collected">Data we collect</h2>
+    <p>Kippit stores the following data, but only locally on your device and optionally in your private iCloud account. This data is never transmitted to us or any third party:</p>
+    <ul>
+      <li>Expense records &mdash; amount, category, payment method, date, optional note</li>
+      <li>Repayment records &mdash; amount, account, type, date, optional note</li>
+      <li>Transfer records &mdash; amount, from/to payment methods, date, optional note</li>
+      <li>Scheduled entry definitions &mdash; name, amount, interval, due dates</li>
+      <li>App settings &mdash; categories, payment methods, favorites, budget, currency preference</li>
+    </ul>
+
+    <div class="hbox blue">
+      <p><strong>All data is stored using Apple&rsquo;s SwiftData framework on your device.</strong> You have complete ownership and control. You can export, delete, or clear all data at any time from within the app.</p>
+    </div>
+
+    <p class="sub-h">Privacy nutrition label summary</p>
+    <table class="ptable">
+      <thead>
+        <tr><th>Data type</th><th>Collected?</th><th>Linked to identity?</th><th>Shared?</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>Financial info (expense amounts)</td><td><span class="no">Not collected by developer</span></td><td>No</td><td>No</td></tr>
+        <tr><td>Contact info</td><td><span class="no">Not collected</span></td><td>No</td><td>No</td></tr>
+        <tr><td>Location data</td><td><span class="no">Not collected</span></td><td>No</td><td>No</td></tr>
+        <tr><td>Usage data / analytics</td><td><span class="no">Not collected</span></td><td>No</td><td>No</td></tr>
+        <tr><td>Device identifiers</td><td><span class="no">Not collected</span></td><td>No</td><td>No</td></tr>
+        <tr><td>Crash diagnostics</td><td><span class="no">Not collected</span></td><td>No</td><td>No</td></tr>
+      </tbody>
+    </table>
+
+    <h2 id="data-not-collected">Data we never collect</h2>
+    <p>Kippit does not collect, transmit, store on any server, or have access to:</p>
+    <ul>
+      <li>Your name, email address, or any personal identifiers</li>
+      <li>Your bank account numbers or financial institution credentials</li>
+      <li>Your device identifiers (IDFA, IDFV, or similar)</li>
+      <li>Your location</li>
+      <li>Usage patterns, screen recordings, or analytics</li>
+      <li>Crash reports or diagnostic data sent to us</li>
+      <li>Any data entered into the app</li>
+    </ul>
+    <p>There is no registration, no login, and no server that receives data from Kippit.</p>
+
+    <h2 id="icloud">iCloud sync</h2>
+    <p>Kippit offers optional iCloud sync. When enabled:</p>
+    <ul>
+      <li>Your data is stored in your personal iCloud account using Apple&rsquo;s CloudKit framework</li>
+      <li>It is accessible only to you and devices signed into the same Apple ID</li>
+      <li>The developer has no access to your iCloud data</li>
+      <li>Apple&rsquo;s privacy policy governs how iCloud stores and handles your data</li>
+    </ul>
+    <p>iCloud sync is optional and can be disabled at any time in Settings. Turning it off keeps your data on this device only. Data already stored in iCloud is not deleted when you disable sync &mdash; manage it through your iPhone&rsquo;s iCloud settings.</p>
+
+    <h2 id="third-parties">Third-party services</h2>
+    <p>Kippit does not integrate with any third-party analytics, advertising, crash reporting, or data collection services. The app makes no network requests except for optional iCloud sync via Apple&rsquo;s CloudKit.</p>
+    <p>Kippit does not display advertisements. No advertising SDKs are included in the app.</p>
+    <p>The app is distributed through Apple&rsquo;s App Store. Apple may collect certain data as part of the App Store distribution process, governed by Apple&rsquo;s own privacy policy.</p>
+
+    <h2 id="children">Children&rsquo;s privacy</h2>
+    <p>Kippit is rated 4+ on the App Store and is suitable for all ages. Because we collect no personal data from any user, there are no special provisions required for users under 13. No data from children or any other users is collected or transmitted.</p>
+
+    <h2 id="changes">Changes to this policy</h2>
+    <p>If this policy is updated, the new version will be posted at kipp-it.app/privacy with a revised &ldquo;Last updated&rdquo; date. Continued use of the app after changes constitutes acceptance of the updated policy.</p>
+    <p>Because Kippit collects no personal data, any policy changes are expected to be minor and administrative in nature.</p>
+
+    <h2 id="contact">Contact</h2>
+    <p>If you have questions about this privacy policy or how Kippit handles data, please get in touch:</p>
+
+    <div class="contact-card">
+      <div>
+        <h3>Kippit Support</h3>
+        <p>Questions about privacy, data handling, or the app.</p>
+        <a href="mailto:hello@kipp-it.app">hello@kipp-it.app</a>
+      </div>
+      <div class="contact-meta">
+        Developer<br><span>Erica Cheong</span><br>
+        App<br><span>Kippit v1.0</span><br>
+        Website<br><span>kipp-it.app</span>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<footer class="site-footer">
+  <a href="/" class="footer-logo">Kipp<span>it</span></a>
+  <span class="footer-copy">&copy; 2026 Kippit &middot; <a href="mailto:hello@kipp-it.app">hello@kipp-it.app</a></span>
+</footer>
+
+<script>
+(function() {
+  var headings = document.querySelectorAll('.policy h2[id]');
+  var links    = document.querySelectorAll('.toc a');
+  if (!headings.length || !links.length) return;
+
+  function activate() {
+    var scrollY = window.scrollY || window.pageYOffset;
+    var current = '';
+    for (var i = 0; i < headings.length; i++) {
+      if (scrollY >= headings[i].offsetTop - 140) {
+        current = headings[i].id;
+      }
+    }
+    for (var j = 0; j < links.length; j++) {
+      var href = links[j].getAttribute('href');
+      if (href === '#' + current) {
+        links[j].classList.add('active');
+      } else {
+        links[j].classList.remove('active');
+      }
+    }
+  }
+
+  window.addEventListener('scroll', activate, { passive: true });
+  activate();
+})();
+</script>
+
+</body>
+</html>

@@ -1,0 +1,806 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kippit — Expense, Repayment & Transfer Tracker</title>
+<meta name="description" content="Kippit is a fast, private iPhone expense tracker. Log expenses in 3 taps. Track credit card and mortgage repayments separately. Know your real monthly cash outflow.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --ink:     #0d0e10;
+    --ink-2:   #3a3d45;
+    --ink-3:   #7a7f8e;
+    --paper:   #f7f6f2;
+    --paper-2: #eeede8;
+    --accent:  #1a6aff;
+    --accent-2:#e8f0ff;
+    --red:     #e63b2e;
+    --amber:   #c47c00;
+    --teal:    #0a6651;
+    --r: 1rem;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--paper);
+    color: var(--ink);
+    font-size: 17px;
+    line-height: 1.65;
+    overflow-x: hidden;
+  }
+
+  /* ── NAV ── */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 1.1rem 2rem;
+    background: rgba(247,246,242,0.88);
+    backdrop-filter: blur(14px);
+    border-bottom: 1px solid rgba(0,0,0,0.07);
+  }
+  .nav-logo {
+    font-family: 'Syne', sans-serif;
+    font-weight: 800; font-size: 1.25rem;
+    letter-spacing: -0.02em; color: var(--ink);
+    text-decoration: none;
+  }
+  .nav-logo span { color: var(--accent); }
+  .nav-links { display: flex; gap: 2rem; list-style: none; }
+  .nav-links a { color: var(--ink-2); text-decoration: none; font-size: 0.9rem; font-weight: 500; transition: color 0.2s; }
+  .nav-links a:hover { color: var(--accent); }
+  .nav-cta {
+    background: var(--ink); color: #fff;
+    padding: 0.55rem 1.3rem; border-radius: 100px;
+    font-size: 0.88rem; font-weight: 600;
+    text-decoration: none; transition: background 0.2s;
+  }
+  .nav-cta:hover { background: var(--accent); }
+
+  /* ── HERO ── */
+  .hero {
+    min-height: 100vh;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    align-items: center;
+    gap: 4rem;
+    padding: 9rem 2rem 5rem;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  .hero-text { animation: fadeUp 0.8s ease both; }
+  .hero-badge {
+    display: inline-flex; align-items: center; gap: 0.5rem;
+    background: var(--accent-2); color: var(--accent);
+    font-size: 0.8rem; font-weight: 600; letter-spacing: 0.04em;
+    padding: 0.35rem 0.9rem; border-radius: 100px;
+    margin-bottom: 1.5rem; text-transform: uppercase;
+  }
+  .hero-badge::before { content: ''; width: 6px; height: 6px; border-radius: 50%; background: var(--accent); }
+
+  h1 {
+    font-family: 'Syne', sans-serif;
+    font-size: clamp(2.8rem, 5vw, 4.2rem);
+    font-weight: 800;
+    line-height: 1.05;
+    letter-spacing: -0.03em;
+    color: var(--ink);
+    margin-bottom: 1.25rem;
+  }
+  h1 em { font-style: normal; color: var(--accent); }
+
+  .hero-sub {
+    font-size: 1.1rem;
+    color: var(--ink-2);
+    max-width: 440px;
+    margin-bottom: 2.5rem;
+    font-weight: 300;
+    line-height: 1.7;
+  }
+
+  .hero-actions { display: flex; gap: 1rem; align-items: center; flex-wrap: wrap; }
+  .btn-primary {
+    display: inline-flex; align-items: center; gap: 0.5rem;
+    background: var(--ink); color: #fff;
+    padding: 0.9rem 2rem; border-radius: 100px;
+    font-size: 0.95rem; font-weight: 600;
+    text-decoration: none; transition: all 0.2s;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+  }
+  .btn-primary:hover { background: var(--accent); transform: translateY(-2px); box-shadow: 0 8px 28px rgba(26,106,255,0.3); }
+  .btn-primary svg { width: 18px; height: 18px; }
+
+  .btn-ghost {
+    color: var(--ink-2); font-size: 0.9rem; font-weight: 500;
+    text-decoration: none; display: flex; align-items: center; gap: 0.4rem;
+    transition: color 0.2s;
+  }
+  .btn-ghost:hover { color: var(--accent); }
+
+  /* ── PHONE MOCKUP ── */
+  .hero-visual {
+    display: flex; justify-content: center; align-items: center;
+    animation: fadeUp 0.8s 0.2s ease both;
+    position: relative;
+  }
+
+  .phone-wrap {
+    position: relative;
+    width: 280px;
+  }
+
+  .phone-wrap::before {
+    content: '';
+    position: absolute;
+    inset: -40px -60px -40px -60px;
+    background: radial-gradient(ellipse at center, rgba(26,106,255,0.12) 0%, transparent 70%);
+    border-radius: 50%;
+    pointer-events: none;
+  }
+
+  .phone {
+    width: 280px;
+    background: var(--ink);
+    border-radius: 44px;
+    padding: 12px;
+    box-shadow:
+      0 0 0 1px rgba(255,255,255,0.08),
+      0 30px 80px rgba(0,0,0,0.35),
+      0 8px 24px rgba(0,0,0,0.2);
+    position: relative;
+  }
+
+  .phone-screen {
+    background: #f7f6f2;
+    border-radius: 34px;
+    overflow: hidden;
+    height: 560px;
+    position: relative;
+  }
+
+  .phone-notch {
+    width: 90px; height: 28px;
+    background: var(--ink);
+    border-radius: 0 0 18px 18px;
+    margin: 0 auto;
+    position: relative; z-index: 2;
+  }
+
+  .phone-content { padding: 0 16px 16px; }
+
+  .phone-nav-title {
+    font-family: 'Syne', sans-serif;
+    font-size: 20px; font-weight: 700;
+    color: var(--ink);
+    padding: 10px 0 6px;
+  }
+
+  .phone-seg {
+    display: flex;
+    background: #e8e7e2;
+    border-radius: 10px;
+    padding: 3px;
+    margin-bottom: 12px;
+  }
+  .phone-seg-btn {
+    flex: 1; text-align: center;
+    font-size: 11px; font-weight: 600;
+    padding: 5px 0; border-radius: 8px;
+    color: #888;
+  }
+  .phone-seg-btn.active {
+    background: var(--red); color: #fff;
+  }
+
+  .phone-amount {
+    text-align: center;
+    font-family: 'Syne', sans-serif;
+    font-size: 42px; font-weight: 700;
+    color: var(--ink);
+    padding: 4px 0 2px;
+    letter-spacing: -0.02em;
+  }
+  .phone-amount span { font-size: 22px; color: #999; }
+
+  .phone-row-label {
+    font-size: 10px; font-weight: 600;
+    color: #888; margin-bottom: 6px;
+    text-transform: uppercase; letter-spacing: 0.04em;
+  }
+
+  .phone-cats {
+    display: flex; gap: 8px; margin-bottom: 12px; overflow: hidden;
+  }
+  .phone-cat {
+    display: flex; flex-direction: column; align-items: center; gap: 3px;
+  }
+  .phone-cat-icon {
+    width: 40px; height: 40px; border-radius: 12px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 18px;
+  }
+  .phone-cat-icon.sel { outline: 2px solid var(--accent); }
+  .phone-cat-lbl { font-size: 8px; color: #888; }
+
+  .phone-favs { display: flex; gap: 6px; margin-bottom: 10px; }
+  .phone-fav {
+    font-size: 10px;
+    background: var(--paper-2);
+    border: 1px solid rgba(0,0,0,0.1);
+    border-radius: 100px;
+    padding: 4px 10px;
+    color: var(--ink);
+    white-space: nowrap;
+  }
+
+  .phone-numpad {
+    display: grid; grid-template-columns: repeat(3, 1fr);
+    gap: 1px; background: rgba(0,0,0,0.08);
+    border-top: 1px solid rgba(0,0,0,0.08);
+    margin-top: auto;
+    position: absolute; bottom: 0; left: 0; right: 0;
+  }
+  .phone-key {
+    background: #f7f6f2;
+    text-align: center; padding: 13px 0;
+    font-size: 18px; color: var(--ink);
+    font-family: 'Syne', sans-serif; font-weight: 600;
+  }
+  .phone-key.add-btn {
+    background: var(--red); color: #fff;
+    font-size: 12px; font-weight: 700; letter-spacing: 0.04em;
+  }
+
+  .phone-tab-bar {
+    display: flex;
+    border-top: 1px solid rgba(0,0,0,0.08);
+    background: rgba(247,246,242,0.95);
+    padding: 8px 0 4px;
+    position: absolute; bottom: 0; left: 0; right: 0;
+  }
+  .phone-tab {
+    flex: 1; display: flex; flex-direction: column;
+    align-items: center; gap: 3px;
+    font-size: 9px; color: #999;
+  }
+  .phone-tab.active { color: var(--accent); }
+  .phone-tab svg { width: 16px; height: 16px; }
+
+  /* floating badges */
+  .float-badge {
+    position: absolute;
+    background: white;
+    border-radius: 14px;
+    padding: 10px 14px;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.12), 0 2px 8px rgba(0,0,0,0.08);
+    font-size: 12px; font-weight: 500;
+    white-space: nowrap;
+    animation: float 4s ease-in-out infinite;
+  }
+  .float-badge .fb-label { color: #888; font-size: 10px; display: block; margin-bottom: 2px; }
+  .float-badge .fb-val { color: var(--ink); font-family: 'Syne', sans-serif; font-weight: 700; font-size: 15px; }
+
+  .fb-1 { top: 80px; right: -90px; animation-delay: 0s; }
+  .fb-2 { bottom: 200px; right: -80px; animation-delay: 1.5s; }
+  .fb-3 { bottom: 80px; left: -80px; animation-delay: 0.8s; }
+  .fb-dot { width: 8px; height: 8px; border-radius: 50%; display: inline-block; margin-right: 5px; }
+
+  /* ── STATS BAR ── */
+  .stats-bar {
+    background: var(--ink);
+    color: #fff;
+    padding: 2.5rem 2rem;
+    display: flex; justify-content: center; gap: 0;
+  }
+  .stat-item {
+    text-align: center;
+    padding: 0 3.5rem;
+    border-right: 1px solid rgba(255,255,255,0.1);
+  }
+  .stat-item:last-child { border-right: none; }
+  .stat-num {
+    font-family: 'Syne', sans-serif;
+    font-size: 2.2rem; font-weight: 800;
+    letter-spacing: -0.03em;
+    color: #fff;
+  }
+  .stat-num span { color: var(--accent); }
+  .stat-lbl { font-size: 0.8rem; color: rgba(255,255,255,0.5); margin-top: 2px; }
+
+  /* ── SECTIONS ── */
+  section { padding: 6rem 2rem; max-width: 1200px; margin: 0 auto; }
+
+  .section-label {
+    font-size: 0.75rem; font-weight: 700;
+    letter-spacing: 0.1em; text-transform: uppercase;
+    color: var(--accent); margin-bottom: 1rem;
+  }
+  h2 {
+    font-family: 'Syne', sans-serif;
+    font-size: clamp(2rem, 3.5vw, 3rem);
+    font-weight: 800; letter-spacing: -0.03em;
+    line-height: 1.1; color: var(--ink);
+    margin-bottom: 1rem;
+  }
+  .section-sub {
+    font-size: 1.05rem; color: var(--ink-2);
+    max-width: 560px; font-weight: 300; line-height: 1.7;
+    margin-bottom: 3.5rem;
+  }
+
+  /* ── FEATURES GRID ── */
+  .features-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.5px;
+    background: rgba(0,0,0,0.08);
+    border: 1px solid rgba(0,0,0,0.08);
+    border-radius: 24px;
+    overflow: hidden;
+  }
+
+  .feature-card {
+    background: var(--paper);
+    padding: 2.5rem 2rem;
+    transition: background 0.2s;
+  }
+  .feature-card:hover { background: #fff; }
+
+  .feature-icon {
+    width: 48px; height: 48px;
+    border-radius: 14px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 22px;
+    margin-bottom: 1.25rem;
+  }
+
+  .feature-card h3 {
+    font-family: 'Syne', sans-serif;
+    font-size: 1.05rem; font-weight: 700;
+    color: var(--ink); margin-bottom: 0.5rem;
+    letter-spacing: -0.01em;
+  }
+  .feature-card p { font-size: 0.9rem; color: var(--ink-2); line-height: 1.65; font-weight: 300; }
+
+  /* ── TABS SHOWCASE ── */
+  .tabs-section { background: var(--ink); border-radius: 32px; padding: 4rem; margin: 0 2rem; }
+  .tabs-section .section-label { color: rgba(255,255,255,0.4); }
+  .tabs-section h2 { color: #fff; }
+  .tabs-section .section-sub { color: rgba(255,255,255,0.55); }
+
+  .tabs-row { display: flex; gap: 1rem; margin-bottom: 2rem; flex-wrap: wrap; }
+  .tab-pill {
+    padding: 0.6rem 1.3rem; border-radius: 100px;
+    font-size: 0.88rem; font-weight: 600;
+    cursor: pointer; transition: all 0.2s;
+    border: 1.5px solid rgba(255,255,255,0.15);
+    color: rgba(255,255,255,0.5);
+    background: transparent;
+  }
+  .tab-pill.active-exp  { background: var(--red);   color: #fff; border-color: var(--red); }
+  .tab-pill.active-rep  { background: var(--amber); color: #fff; border-color: var(--amber); }
+  .tab-pill.active-tr   { background: var(--teal);  color: #fff; border-color: var(--teal); }
+
+  .tabs-content {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 3rem; align-items: center;
+  }
+  .tab-desc { color: rgba(255,255,255,0.7); font-weight: 300; line-height: 1.7; font-size: 1rem; }
+  .tab-desc strong { color: #fff; font-weight: 600; }
+
+  .tab-bullets { list-style: none; margin-top: 1.5rem; display: flex; flex-direction: column; gap: 0.75rem; }
+  .tab-bullets li {
+    display: flex; align-items: flex-start; gap: 0.75rem;
+    font-size: 0.9rem; color: rgba(255,255,255,0.65);
+  }
+  .tab-bullets li::before {
+    content: '→'; color: var(--accent); flex-shrink: 0; margin-top: 1px;
+  }
+
+  /* ── HOW IT WORKS ── */
+  .steps {
+    display: grid; grid-template-columns: repeat(4, 1fr);
+    gap: 2rem; counter-reset: steps;
+  }
+  .step { counter-increment: steps; }
+  .step-num {
+    font-family: 'Syne', sans-serif;
+    font-size: 3rem; font-weight: 800;
+    color: var(--paper-2); letter-spacing: -0.04em;
+    margin-bottom: 0.75rem;
+    line-height: 1;
+  }
+  .step h3 {
+    font-family: 'Syne', sans-serif;
+    font-size: 1rem; font-weight: 700;
+    color: var(--ink); margin-bottom: 0.4rem;
+  }
+  .step p { font-size: 0.88rem; color: var(--ink-2); line-height: 1.65; font-weight: 300; }
+
+  /* ── PRIVACY CALLOUT ── */
+  .privacy-callout {
+    background: var(--accent-2);
+    border-radius: 24px;
+    padding: 3.5rem;
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 2.5rem;
+    align-items: center;
+    margin: 0 2rem;
+  }
+  .privacy-icon {
+    width: 72px; height: 72px;
+    background: var(--accent);
+    border-radius: 20px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 32px; flex-shrink: 0;
+  }
+  .privacy-callout h2 { margin-bottom: 0.5rem; font-size: 1.8rem; }
+  .privacy-callout p { color: var(--ink-2); max-width: 540px; font-weight: 300; }
+
+  .privacy-facts {
+    display: flex; gap: 2rem; margin-top: 1.5rem; flex-wrap: wrap;
+  }
+  .privacy-fact {
+    display: flex; align-items: center; gap: 0.5rem;
+    font-size: 0.88rem; font-weight: 600; color: var(--ink);
+  }
+  .privacy-fact::before { content: '✓'; color: var(--accent); font-weight: 700; }
+
+  /* ── CTA ── */
+  .cta-section {
+    text-align: center; padding: 7rem 2rem;
+  }
+  .cta-section h2 { margin-bottom: 1rem; }
+  .cta-section p { color: var(--ink-2); max-width: 440px; margin: 0 auto 2.5rem; font-weight: 300; }
+  .cta-app-badge {
+    display: inline-flex; align-items: center; gap: 1rem;
+    background: var(--ink); color: #fff;
+    padding: 1rem 2rem; border-radius: 18px;
+    text-decoration: none; transition: all 0.2s;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.2);
+  }
+  .cta-app-badge:hover { transform: translateY(-3px); box-shadow: 0 16px 48px rgba(0,0,0,0.25); }
+  .cta-app-badge svg { width: 32px; height: 32px; }
+  .cta-badge-text { text-align: left; }
+  .cta-badge-text .small { font-size: 0.75rem; opacity: 0.6; display: block; }
+  .cta-badge-text .big { font-family: 'Syne', sans-serif; font-size: 1.1rem; font-weight: 700; }
+
+  /* ── FOOTER ── */
+  footer {
+    border-top: 1px solid rgba(0,0,0,0.08);
+    padding: 2.5rem 2rem;
+    display: flex; justify-content: space-between; align-items: center;
+    max-width: 1200px; margin: 0 auto;
+    flex-wrap: wrap; gap: 1rem;
+  }
+  .footer-logo {
+    font-family: 'Syne', sans-serif; font-weight: 800;
+    font-size: 1.1rem; color: var(--ink); text-decoration: none;
+  }
+  .footer-logo span { color: var(--accent); }
+  .footer-links { display: flex; gap: 2rem; }
+  .footer-links a { color: var(--ink-3); font-size: 0.88rem; text-decoration: none; transition: color 0.2s; }
+  .footer-links a:hover { color: var(--accent); }
+  .footer-copy { color: var(--ink-3); font-size: 0.82rem; }
+
+  /* ── ANIMATIONS ── */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(24px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes float {
+    0%, 100% { transform: translateY(0); }
+    50%       { transform: translateY(-8px); }
+  }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 900px) {
+    .hero { grid-template-columns: 1fr; text-align: center; padding-top: 7rem; }
+    .hero-sub { margin: 0 auto 2rem; }
+    .hero-actions { justify-content: center; }
+    .hero-visual { display: none; }
+    .features-grid { grid-template-columns: 1fr 1fr; }
+    .stats-bar { flex-wrap: wrap; gap: 1rem; }
+    .stat-item { border-right: none; padding: 0 2rem; }
+    .tabs-content { grid-template-columns: 1fr; }
+    .steps { grid-template-columns: 1fr 1fr; }
+    .privacy-callout { grid-template-columns: 1fr; }
+    nav .nav-links { display: none; }
+  }
+  @media (max-width: 600px) {
+    .features-grid { grid-template-columns: 1fr; }
+    .steps { grid-template-columns: 1fr; }
+    .tabs-section { padding: 2.5rem 1.5rem; margin: 0; border-radius: 0; }
+    .privacy-callout { margin: 0; border-radius: 0; padding: 2.5rem 1.5rem; }
+    footer { flex-direction: column; align-items: flex-start; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a href="/" class="nav-logo">Kipp<span>it</span></a>
+  <ul class="nav-links">
+    <li><a href="#features">Features</a></li>
+    <li><a href="#how-it-works">How it works</a></li>
+    <li><a href="#privacy">Privacy</a></li>
+    <li><a href="mailto:hello@kipp-it.app">Support</a></li>
+  </ul>
+  <a href="#download" class="nav-cta">Download free</a>
+</nav>
+
+<!-- HERO -->
+<section class="hero" style="padding-top:9rem; max-width:1200px;">
+  <div class="hero-text">
+    <div class="hero-badge">Now on the App Store</div>
+    <h1>Know where every dollar <em>goes.</em></h1>
+    <p class="hero-sub">Kippit is a fast, private iPhone expense tracker. Log in 3 taps. Track credit card repayments and mortgage separately. See your real monthly cash outflow.</p>
+    <div class="hero-actions">
+      <a href="#download" class="btn-primary">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/></svg>
+        Download for iPhone
+      </a>
+      <a href="#features" class="btn-ghost">See all features →</a>
+    </div>
+  </div>
+
+  <div class="hero-visual">
+    <div class="phone-wrap">
+      <!-- Floating badges -->
+      <div class="float-badge fb-1">
+        <span class="fb-label">Today</span>
+        <span class="fb-val"><span class="fb-dot" style="background:#e63b2e;"></span>$47.25 spent</span>
+      </div>
+      <div class="float-badge fb-2">
+        <span class="fb-label">Next due</span>
+        <span class="fb-val"><span class="fb-dot" style="background:#c47c00;"></span>Mortgage Apr 1</span>
+      </div>
+      <div class="float-badge fb-3">
+        <span class="fb-label">iCloud sync</span>
+        <span class="fb-val"><span class="fb-dot" style="background:#0a6651;"></span>All data private</span>
+      </div>
+
+      <div class="phone">
+        <div class="phone-screen">
+          <div class="phone-notch"></div>
+          <div class="phone-content">
+            <div class="phone-nav-title">Add</div>
+            <div class="phone-seg">
+              <div class="phone-seg-btn active">Expense</div>
+              <div class="phone-seg-btn">Repayment</div>
+              <div class="phone-seg-btn">Transfer</div>
+            </div>
+            <div class="phone-amount"><span>$</span>12.00</div>
+            <div style="height:8px;"></div>
+            <div class="phone-row-label">Category</div>
+            <div class="phone-cats">
+              <div class="phone-cat">
+                <div class="phone-cat-icon sel" style="background:#FFF3E0;">🍔</div>
+                <div class="phone-cat-lbl">Food</div>
+              </div>
+              <div class="phone-cat">
+                <div class="phone-cat-icon" style="background:#E3F2FD;">🚇</div>
+                <div class="phone-cat-lbl">Transit</div>
+              </div>
+              <div class="phone-cat">
+                <div class="phone-cat-icon" style="background:#FBE9E7;">☕</div>
+                <div class="phone-cat-lbl">Coffee</div>
+              </div>
+              <div class="phone-cat">
+                <div class="phone-cat-icon" style="background:#F3E5F5;">🛍</div>
+                <div class="phone-cat-lbl">Shop</div>
+              </div>
+            </div>
+            <div class="phone-row-label" style="margin-top:4px;">Favorites</div>
+            <div class="phone-favs">
+              <div class="phone-fav">☕ $5.50</div>
+              <div class="phone-fav">🚇 $2.75</div>
+              <div class="phone-fav">🍱 $12.00</div>
+            </div>
+          </div>
+          <div class="phone-numpad">
+            <div class="phone-key">1</div><div class="phone-key">2</div><div class="phone-key">3</div>
+            <div class="phone-key">4</div><div class="phone-key">5</div><div class="phone-key">6</div>
+            <div class="phone-key">7</div><div class="phone-key">8</div><div class="phone-key">9</div>
+            <div class="phone-key">.</div><div class="phone-key">0</div><div class="phone-key add-btn">Add</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- STATS BAR -->
+<div class="stats-bar">
+  <div class="stat-item">
+    <div class="stat-num">3<span>×</span></div>
+    <div class="stat-lbl">tabs — Expense, Repayment, Transfer</div>
+  </div>
+  <div class="stat-item">
+    <div class="stat-num">$<span>0</span></div>
+    <div class="stat-lbl">no subscription, free forever</div>
+  </div>
+  <div class="stat-item">
+    <div class="stat-num">100<span>%</span></div>
+    <div class="stat-lbl">on-device — your data stays yours</div>
+  </div>
+  <div class="stat-item">
+    <div class="stat-num">iOS<span> 17</span></div>
+    <div class="stat-lbl">built native with SwiftUI</div>
+  </div>
+</div>
+
+<!-- FEATURES -->
+<section id="features">
+  <div class="section-label">Everything you need</div>
+  <h2>Built for how you actually spend</h2>
+  <p class="section-sub">Most expense trackers only track expenses. Kippit tracks the full picture — what you spent, what you owe, and what's coming.</p>
+
+  <div class="features-grid">
+    <div class="feature-card">
+      <div class="feature-icon" style="background:#FFF3E0;">⚡</div>
+      <h3>Log in under 3 taps</h3>
+      <p>Calculator-style numpad. Tap a favorite chip and the amount, category, and payment method fill automatically.</p>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon" style="background:#E3F2FD;">💳</div>
+      <h3>Repayment tracking</h3>
+      <p>Credit card and mortgage repayments tracked separately — they never inflate your spending totals.</p>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon" style="background:#E1F5EE;">🔄</div>
+      <h3>Transfer tracking</h3>
+      <p>Loading Octopus from Visa? Record it as a transfer — it moves between payment methods without counting as spending.</p>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon" style="background:#EDE7F6;">📅</div>
+      <h3>Scheduled entries</h3>
+      <p>Set up recurring expenses (bus pass, school fees) and repayments (mortgage due date). They appear as upcoming in your ledger.</p>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon" style="background:#FFFDE7;">📊</div>
+      <h3>Monthly estimate</h3>
+      <p>Actuals + scheduled remaining + projected daily spend. See your real end-of-month cash outflow before the month ends.</p>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon" style="background:#FBE9E7;">🔔</div>
+      <h3>Reminders</h3>
+      <p>Get notified before scheduled payments are due. Daily nudge to log your expenses. Budget alerts when you're close.</p>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon" style="background:#E8F5E9;">☁️</div>
+      <h3>iCloud sync</h3>
+      <p>Your data syncs privately across all your devices through your own iCloud account. No account needed.</p>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon" style="background:#FCE4EC;">📤</div>
+      <h3>Export & import</h3>
+      <p>Export as JSON or CSV. Import back from any previous export. Schedule definitions and upcoming instances included.</p>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon" style="background:#E3F2FD;">📱</div>
+      <h3>Lock Screen widget</h3>
+      <p>Today's spend and your next due payment — always visible without opening the app. Siri Shortcuts for hands-free logging.</p>
+    </div>
+  </div>
+</section>
+
+<!-- THREE TABS -->
+<div class="tabs-section" id="tabs">
+  <div class="section-label">The Add screen</div>
+  <h2>One screen. Three entry types.</h2>
+  <p class="section-sub" style="color:rgba(255,255,255,0.55);">Switch between Expense, Repayment, and Transfer with a single tap. The button colour tells you exactly which mode you're in.</p>
+
+  <div class="tabs-row">
+    <button class="tab-pill active-exp">🔴 Expense</button>
+    <button class="tab-pill active-rep">🟠 Repayment</button>
+    <button class="tab-pill active-tr">🟢 Transfer</button>
+  </div>
+
+  <div class="tabs-content">
+    <div>
+      <p class="tab-desc">
+        <strong>Expenses</strong> are what you spend day to day — coffee, groceries, transit. They count toward your spending totals and show in the category breakdown.
+      </p>
+      <ul class="tab-bullets">
+        <li>Category + payment method selector</li>
+        <li>Favorites for one-tap common entries</li>
+        <li>Backdate to any past date</li>
+        <li>Red Add button — always clear which mode you're in</li>
+      </ul>
+    </div>
+    <div>
+      <p class="tab-desc">
+        <strong>Repayments</strong> are when you pay off your credit card bill or mortgage instalment. They count toward total cash out but never inflate your spending totals.
+      </p>
+      <ul class="tab-bullets">
+        <li>Account selector (Visa, Amex, Mortgage)</li>
+        <li>Amber Add button — visually distinct</li>
+        <li>Appears in ledger with amber accent</li>
+        <li>Shown separately on Dashboard</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- HOW IT WORKS -->
+<section id="how-it-works">
+  <div class="section-label">Simple by design</div>
+  <h2>Up and running in minutes</h2>
+  <p class="section-sub">No account, no setup, no bank connections. Just open the app and start logging.</p>
+
+  <div class="steps">
+    <div class="step">
+      <div class="step-num">01</div>
+      <h3>Install free</h3>
+      <p>Download from the App Store. No account required. Default categories and payment methods pre-seeded so you can log immediately.</p>
+    </div>
+    <div class="step">
+      <div class="step-num">02</div>
+      <h3>Log daily</h3>
+      <p>Tap the Add tab. Type or use a favorite. Hit Add. Done in under 3 taps. Backdate anything you forgot.</p>
+    </div>
+    <div class="step">
+      <div class="step-num">03</div>
+      <h3>Set up schedules</h3>
+      <p>Add your mortgage, credit card due dates, bus pass, school fees. Kippit shows them as upcoming and reminds you before they're due.</p>
+    </div>
+    <div class="step">
+      <div class="step-num">04</div>
+      <h3>Know your outflow</h3>
+      <p>The Dashboard shows spending, repayments, and a month-end projection. Total cash out — the real number — always visible.</p>
+    </div>
+  </div>
+</section>
+
+<!-- PRIVACY -->
+<div class="privacy-callout" id="privacy">
+  <div class="privacy-icon">🔒</div>
+  <div>
+    <div class="section-label" style="margin-bottom:0.5rem;">Privacy first</div>
+    <h2>Your finances stay on your device</h2>
+    <p>Kippit stores everything locally using Apple's SwiftData. Optional iCloud sync uses your own private iCloud container — the developer never sees your data.</p>
+    <div class="privacy-facts">
+      <div class="privacy-fact">No account required</div>
+      <div class="privacy-fact">No ads ever</div>
+      <div class="privacy-fact">No analytics</div>
+      <div class="privacy-fact">No data sold</div>
+    </div>
+  </div>
+</div>
+
+<!-- CTA -->
+<section class="cta-section" id="download" style="max-width:1200px;">
+  <div class="section-label">Ready?</div>
+  <h2>Start tracking smarter</h2>
+  <p>Free. Private. Native iOS. No subscription required.</p>
+  <a href="#" class="cta-app-badge">
+    <svg viewBox="0 0 24 24" fill="white"><path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/></svg>
+    <div class="cta-badge-text">
+      <span class="small">Download on the</span>
+      <span class="big">App Store</span>
+    </div>
+  </a>
+  <p style="margin-top:1.5rem; font-size:0.85rem; color:var(--ink-3);">Questions? <a href="mailto:hello@kipp-it.app" style="color:var(--accent);">hello@kipp-it.app</a></p>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <a href="/" class="footer-logo">Kipp<span>it</span></a>
+  <div class="footer-links">
+    <a href="/privacy">Privacy Policy</a>
+    <a href="mailto:hello@kipp-it.app">Support</a>
+  </div>
+  <span class="footer-copy">© 2026 Kippit. Made in Hong Kong.</span>
+</footer>
+
+</body>
+</html>
